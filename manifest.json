@@ -4,11 +4,11 @@
   "manifest_version": 1,
   "description": "Controle simples de dinheiro (Vinténs) para a mesa. Só o GM edita; todos veem o saldo.",
   "author": "Seu Nome",
-  "icon": "/https://emixiszao.github.io/vintens/icon.svg",
+  "icon": "https://emixiszao.github.io/vintens/icon.svg",
   "action": {
     "title": "Vinténs",
-    "icon": "/https://emixiszao.github.io/vintens/icon.svg",
-    "popover": "/https://emixiszao.github.io/vintens/index.html",
+    "icon": "https://emixiszao.github.io/vintens/icon.svg",
+    "popover": "https://emixiszao.github.io/vintens/index.html",
     "width": 320,
     "height": 420
   }
