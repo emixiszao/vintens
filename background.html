@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>Vinténs (fundo)</title></head>
+<body>
+<script type="module">
+import OBR from "https://esm.sh/@owlbear-rodeo/sdk@3";
+
+const CANAL = "com.vintens.dinheiro/ganho";
+const POPOVER_ID = "com.vintens.dinheiro/aviso";
+const DURACAO_MS = 3500;
+
+const som = new Audio("/pesetas.mp3");
+som.preload = "auto";
+
+let timer = null;
+
+async function mostrarAviso(quantidade) {
+  // Som
+  try { som.currentTime = 0; await som.play(); } catch (e) { console.warn("Som bloqueado pelo navegador:", e); }
+
+  // Aviso no canto superior direito
+  clearTimeout(timer);
+  try { await OBR.popover.close(POPOVER_ID); } catch (e) {}
+
+  const largura = await OBR.viewport.getWidth();
+  await OBR.popover.open({
+    id: POPOVER_ID,
+    url: `/aviso.html?v=${encodeURIComponent(quantidade)}&t=${Date.now()}`,
+    width: 190,
+    height: 64,
+    anchorReference: "POSITION",
+    anchorPosition: { left: largura - 16, top: 70 },
+    anchorOrigin: { horizontal: "RIGHT", vertical: "TOP" },
+    transformOrigin: { horizontal: "RIGHT", vertical: "TOP" },
+    hidePaper: true,
+    disableClickAway: true
+  });
+
+  timer = setTimeout(() => OBR.popover.close(POPOVER_ID), DURACAO_MS);
+}
+
+OBR.onReady(() => {
+  OBR.broadcast.onMessage(CANAL, evento => {
+    const qtd = Number(evento.data?.amount ?? 0);
+    if (qtd > 0) mostrarAviso(qtd);
+  });
+});
+</script>
+</body>
+</html>

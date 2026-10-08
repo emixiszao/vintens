@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  html, body { margin:0; background:transparent; font-family:system-ui,sans-serif; overflow:hidden; }
+  .aviso {
+    display:flex; align-items:center; gap:10px; justify-content:flex-end;
+    padding:8px 14px; border-radius:12px;
+    background:#1e2231ee; border:1px solid #d9925e66; box-shadow:0 4px 14px #0009;
+    animation:entrar .35s ease-out;
+  }
+  .aviso img { width:40px; height:40px; object-fit:contain; }
+  .aviso span { font-size:28px; font-weight:700; color:#d9925e; }
+  @keyframes entrar { from { opacity:0; transform:translateX(30px); } to { opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+  <div class="aviso">
+    <span id="q">+0</span>
+    <img src="/vintem.png" alt="Vintém">
+  </div>
+<script>
+  const v = Number(new URLSearchParams(location.search).get("v")) || 0;
+  document.getElementById("q").textContent = "+" + v.toLocaleString("pt-BR");
+</script>
+</body>
+</html>
