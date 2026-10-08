@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>Vinténs (fundo)</title></head>
+<body>
+<script type="module">
+import OBR from "https://esm.sh/@owlbear-rodeo/sdk@3";
+
+const CANAL_GANHO = "com.vintens.dinheiro/ganho";
+const POPOVER_ID = "com.vintens.dinheiro/aviso";
+const som = new Audio("/pesetas.mp3");
+som.volume = 0.7;
+
+let timer;
+
+async function mostrarAviso(amount) {
+  // som
+  try { som.currentTime = 0; await som.play(); } catch (e) { console.warn("Som bloqueado pelo navegador", e); }
+
+  // aviso no canto superior direito
+  const largura = await OBR.viewport.getWidth();
+  await OBR.popover.open({
+    id: POPOVER_ID,
+    url: `/toast.html?v=${amount}&t=${Date.now()}`,
+    width: 190,
+    height: 64,
+    anchorReference: "POSITION",
+    anchorPosition: { left: largura - 16, top: 70 },
+    transformOrigin: { horizontal: "RIGHT", vertical: "TOP" },
+    hidePaper: true,
+    disableClickAway: true
+  });
+
+  clearTimeout(timer);
+  timer = setTimeout(() => OBR.popover.close(POPOVER_ID), 3500);
+}
+
+OBR.onReady(() => {
+  OBR.broadcast.onMessage(CANAL_GANHO, evento => {
+    const amount = Number(evento.data?.amount);
+    if (amount > 0) mostrarAviso(amount);
+  });
+});
+</script>
+</body>
+</html>
